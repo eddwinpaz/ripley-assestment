@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "description": "",
   "main": "index.js",
-  "engines": { "node": "14.13.0" },
+  "engines": { "node": "14.13.0", "npm": "6.14.8" },
   "scripts": {
     "ts:watch": "tsc -w",
     "ts:build": "tsc",
