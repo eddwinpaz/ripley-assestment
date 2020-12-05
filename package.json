@@ -7,9 +7,9 @@
   "scripts": {
     "ts:watch": "tsc -w",
     "ts:build": "tsc",
-    "dev": "nodemon build/index.js",
-    "start": "node build/index.js",
-    "postinstall": "npm i -g typescript && tsc",
+    "dev": "nodemon ./build/index.js",
+    "start": "node ./build/index.js",
+    "postinstall": "tsc",
     "test": "jest --detectOpenHandles",
     "coverage": "jest --coverage --silent"
   },
