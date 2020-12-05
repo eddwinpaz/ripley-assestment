@@ -23,4 +23,3 @@ jobs:
           heroku_app_name: "ripley-backend-server"
           heroku_email: "pazeddwin@gmail.com"
           branch: main
-          # appdir: "build" 
