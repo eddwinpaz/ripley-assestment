@@ -3,13 +3,16 @@
   "version": "1.0.0",
   "description": "",
   "main": "index.js",
+  "engines": { "node": "14.13.0" },
   "scripts": {
     "ts:watch": "tsc -w",
     "ts:build": "tsc",
     "dev": "nodemon ./build/index.js",
-    "start": "tsc && node ./build/index.js",
+    "start": "tsc && node ./dist/index.js",
     "test": "jest --detectOpenHandles",
-    "coverage": "jest --coverage --silent"
+    "coverage": "jest --coverage --silent",
+    "postinstall": "tsc && mv -i -v public dist/ && rm -v -rf src",
+    "deploy": "git add . && git commit -m 'Heroku' && git push"
   },
   "keywords": [],
   "author": "Eddwin Paz",
