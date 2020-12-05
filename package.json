@@ -10,8 +10,7 @@
     "dev": "nodemon ./build/index.js",
     "start": "tsc && node ./dist/index.js",
     "test": "jest --detectOpenHandles",
-    "coverage": "jest --coverage --silent",
-    "deploy": "git add . && git commit -m 'Heroku' && git push"
+    "coverage": "jest --coverage --silent"
   },
   "keywords": [],
   "author": "Eddwin Paz",
