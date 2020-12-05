@@ -4,7 +4,8 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "ts": "tsc -w",
+    "ts:watch": "tsc -w",
+    "ts:build": "tsc",
     "dev": "nodemon ./build/index.js",
     "start": "tsc && node ./build/index.js",
     "test": "jest --detectOpenHandles",
