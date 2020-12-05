@@ -1,1 +1,1 @@
-web: tsc && node ./dist/index.js
+web: npm i -g typescript && npm i && tsc && node ./dist/index.js
