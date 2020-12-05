@@ -1,6 +1,6 @@
 [![Actions Status: test](https://github.com/eddwinpaz/ripley-assestment-backend/workflows/test/badge.svg)](https://github.com/eddwinpaz/ripley-assestment-backend/actions?query=is:success")
 
-# ripley Assestment Backend
+# Ripley Assestment Backend
 
 ## To Run Application using Docker
 
