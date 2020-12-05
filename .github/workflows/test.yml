@@ -20,4 +20,4 @@ jobs:
       - run: npm install --global typescript
       - run: npm install
       - run: npm ts
-      - run: npm test 
+      - run: npm test
