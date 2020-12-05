@@ -16,5 +16,3 @@ db.products.createIndex( { marca: "text", descripcion: "text", nombre: "text" } 
 ```
 
 https://github.com/eddwinpaz/ripley-assestment-backend
-
-
