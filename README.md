@@ -20,6 +20,8 @@ https://github.com/eddwinpaz/ripley-assestment-backend
 
 ## REST API / URLs
 
+URL: https://ripley-backend-server.herokuapp.com/api/product/
+
 - Search:  https://ripley-backend-server.herokuapp.com/api/product/?query=adidas HTTP/GET
 
 - Get Products: https://ripley-backend-server.herokuapp.com/api/product/5fcc273a4565220017811b5f HTTP/GET
