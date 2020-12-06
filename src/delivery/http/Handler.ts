@@ -43,7 +43,7 @@ class Handler {
     } else {
       // Search query on all products columns
       const products = await use_case.searchProducts(query);
-      if (products.length === 0) return res.status(404).json({ products: [] });
+      if (products.length === 0) return res.status(404).json({ message: 'obtained product search successfully', products: [] });
       return res
         .status(200)
         .json({ products: applyDiscount(productDiscount, products), message: "results" });
@@ -64,7 +64,7 @@ class Handler {
 
     const product = await use_case.getProduct(id);
     if (Object.keys(product).length > 0)
-      return res.status(200).json({ message: "success", product });
+      return res.status(200).json({ message: "obtainer product successfully", product });
     return res.status(400).json({ message: "bad request" });
   }
 
@@ -78,7 +78,7 @@ class Handler {
         return res.status(400).json({ message: "invalid json schema" });
 
       const created = use_case.createProduct(value);
-      if (created) return res.status(200).json({ message: "success" });
+      if (created) return res.status(200).json({ message: "created product successfully" });
       return res.status(400).json({ message: "bad request" });
     } catch (err) {
       return res
@@ -99,7 +99,7 @@ class Handler {
       const created = use_case.updateProduct(id, value);
 
       if (created) {
-        return res.status(200).json({ message: "success" });
+        return res.status(200).json({ message: "updated product successfully" });
       }
     } catch (err) {
       return res
@@ -115,7 +115,7 @@ class Handler {
 
     const deleted = await use_case.deleteProduct(id);
 
-    if (deleted) return res.status(200).json({ message: "success" });
+    if (deleted) return res.status(200).json({ message: "deleted product successfully" });
     return res.status(400).json({ message: "bad request" });
   }
 
