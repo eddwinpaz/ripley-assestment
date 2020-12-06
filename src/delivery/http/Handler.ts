@@ -51,7 +51,7 @@ class Handler {
 
     const query: any = req.query.query;
     if(query){
-      this.searchProduct(query, res)
+      await this.searchProduct(query, res)
     }
 
     const repository = new Repository();
