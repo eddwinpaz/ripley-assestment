@@ -69,7 +69,7 @@ class Handler {
             const { id } = req.params;
             const product = yield use_case.getProduct(id);
             if (Object.keys(product).length > 0)
-                return res.status(200).json({ message: "success" });
+                return res.status(200).json({ message: "success", product });
             return res.status(400).json({ message: "bad request" });
         });
     }
