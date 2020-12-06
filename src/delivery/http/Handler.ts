@@ -17,10 +17,7 @@ class Handler {
     this.routes();
   }
 
-  async searchProduct(req: Request, res: Response) {
-    // query search
-    const query: any = req.query.query;
-    // return res.status(200).json({ query })
+  async searchProduct(query: string, res: Response) {
     let productDiscount: number = 0;
 
     if(isPalindrome(query)) {
@@ -51,6 +48,12 @@ class Handler {
   }
 
   async getProducts(req: Request, res: Response) {
+
+    const query: any = req.query.query;
+    if(query){
+      this.searchProduct(query, res)
+    }
+
     const repository = new Repository();
     const use_case = new Usecases(repository);
     const products = await use_case.getProducts();
@@ -125,7 +128,6 @@ class Handler {
     this.router.post("/", this.createProduct);
     this.router.delete("/:id", this.deleteProduct);
     this.router.put("/:id", this.updateProduct);
-    this.router.get("/search/", this.searchProduct);
   }
 }
 
