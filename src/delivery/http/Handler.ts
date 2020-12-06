@@ -120,11 +120,11 @@ class Handler {
   }
 
   routes() {
-    this.router.get("/all/", this.getProducts);
-    this.router.get("/view/:id", this.getProduct);
-    this.router.post("/create/", this.createProduct);
-    this.router.delete("/delete/:id", this.deleteProduct);
-    this.router.put("/update/:id", this.updateProduct);
+    this.router.get("/", this.getProducts);
+    this.router.get("/:id", this.getProduct);
+    this.router.post("/", this.createProduct);
+    this.router.delete("/:id", this.deleteProduct);
+    this.router.put("/:id", this.updateProduct);
     this.router.get("/search/", this.searchProduct);
   }
 }
