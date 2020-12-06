@@ -17,41 +17,37 @@ class Handler {
     this.routes();
   }
 
-  async searchProduct(query: string, res: Response) {
-    let productDiscount: number = 0;
-
-    if(isPalindrome(query)) {
-      productDiscount = 20
-    }
-
-    const repository = new Repository();
-    const use_case = new Usecases(repository);
-
-    // Check if string isnt empty
-    // emptySearch(res, query);
-    invalidCharacterSize(res, query);
-
-    if (isIdSize(query)) {
-      // Search by Id if it matches ID Size
-      const response = await use_case.getProduct(query);
-      if (Object.keys(response).length === 0)
-        return res.status(404).json({ message: "not found", products: [] });
-      return res.status(200).json({ products: [response] });
-    } else {
-      // Search query on all products columns
-      const products = await use_case.searchProducts(query);
-      if (products.length === 0) return res.status(404).json({ message: 'obtained product search successfully', products: [] });
-      return res
-        .status(200)
-        .json({ products: applyDiscount(productDiscount, products), message: "results" });
-    }
-  }
-
   async getProducts(req: Request, res: Response) {
 
     const query: any = req.query.query;
     if(query){
-      await this.searchProduct(query, res)
+      let productDiscount: number = 0;
+
+      if(isPalindrome(query)) {
+        productDiscount = 20
+      }
+  
+      const repository = new Repository();
+      const use_case = new Usecases(repository);
+  
+      // Check if string isnt empty
+      // emptySearch(res, query);
+      invalidCharacterSize(res, query);
+  
+      if (isIdSize(query)) {
+        // Search by Id if it matches ID Size
+        const response = await use_case.getProduct(query);
+        if (Object.keys(response).length === 0)
+          return res.status(404).json({ message: "not found", products: [] });
+        return res.status(200).json({ products: [response] });
+      } else {
+        // Search query on all products columns
+        const products = await use_case.searchProducts(query);
+        if (products.length === 0) return res.status(404).json({ message: 'obtained product search successfully', products: [] });
+        return res
+          .status(200)
+          .json({ products: applyDiscount(productDiscount, products), message: "results" });
+      }
     }
 
     const repository = new Repository();
