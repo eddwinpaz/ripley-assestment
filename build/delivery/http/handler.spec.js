@@ -11,15 +11,6 @@ test("GET /api/product", (done) => {
         done();
     });
 });
-test("GET /api/product", (done) => {
-    request(ctx)
-        .get("/api/product")
-        .set("Content-Type", "application/json")
-        .expect(200)
-        .end(() => {
-        done();
-    });
-});
 test("GET /api/product/01", (done) => {
     request(ctx)
         .get("/api/product/01")

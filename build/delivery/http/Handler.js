@@ -22,40 +22,36 @@ class Handler {
         this.router = express_1.Router();
         this.routes();
     }
-    searchProduct(req, res) {
-        return __awaiter(this, void 0, void 0, function* () {
-            // query search
-            const query = req.query.query;
-            // return res.status(200).json({ query })
-            let productDiscount = 0;
-            if (utils_functions_1.isPalindrome(query)) {
-                productDiscount = 20;
-            }
-            const repository = new repository_1.default();
-            const use_case = new usecases_1.default(repository);
-            // Check if string isnt empty
-            // emptySearch(res, query);
-            utils_functions_1.invalidCharacterSize(res, query);
-            if (utils_functions_1.isIdSize(query)) {
-                // Search by Id if it matches ID Size
-                const response = yield use_case.getProduct(query);
-                if (Object.keys(response).length === 0)
-                    return res.status(404).json({ message: "not found", products: [] });
-                return res.status(200).json({ products: [response] });
-            }
-            else {
-                // Search query on all products columns
-                const products = yield use_case.searchProducts(query);
-                if (products.length === 0)
-                    return res.status(404).json({ products: [] });
-                return res
-                    .status(200)
-                    .json({ products: utils_functions_1.applyDiscount(productDiscount, products), message: "results" });
-            }
-        });
-    }
     getProducts(req, res) {
         return __awaiter(this, void 0, void 0, function* () {
+            const query = req.query.query;
+            if (query) {
+                let productDiscount = 0;
+                if (utils_functions_1.isPalindrome(query)) {
+                    productDiscount = 20;
+                }
+                const repository = new repository_1.default();
+                const use_case = new usecases_1.default(repository);
+                // Check if string isnt empty
+                // emptySearch(res, query);
+                utils_functions_1.invalidCharacterSize(res, query);
+                if (utils_functions_1.isIdSize(query)) {
+                    // Search by Id if it matches ID Size
+                    const response = yield use_case.getProduct(query);
+                    if (Object.keys(response).length === 0)
+                        return res.status(404).json({ message: "not found", products: [] });
+                    return res.status(200).json({ products: [response] });
+                }
+                else {
+                    // Search query on all products columns
+                    const products = yield use_case.searchProducts(query);
+                    if (products.length === 0)
+                        return res.status(404).json({ message: 'obtained product search successfully', products: [] });
+                    return res
+                        .status(200)
+                        .json({ products: utils_functions_1.applyDiscount(productDiscount, products), message: "results" });
+                }
+            }
             const repository = new repository_1.default();
             const use_case = new usecases_1.default(repository);
             const products = yield use_case.getProducts();
@@ -69,7 +65,7 @@ class Handler {
             const { id } = req.params;
             const product = yield use_case.getProduct(id);
             if (Object.keys(product).length > 0)
-                return res.status(200).json({ message: "success", product });
+                return res.status(200).json({ message: "obtainer product successfully", product });
             return res.status(400).json({ message: "bad request" });
         });
     }
@@ -83,7 +79,7 @@ class Handler {
                     return res.status(400).json({ message: "invalid json schema" });
                 const created = use_case.createProduct(value);
                 if (created)
-                    return res.status(200).json({ message: "success" });
+                    return res.status(200).json({ message: "created product successfully" });
                 return res.status(400).json({ message: "bad request" });
             }
             catch (err) {
@@ -104,7 +100,7 @@ class Handler {
                     return res.status(400).json({ message: "invalid json schema" });
                 const created = use_case.updateProduct(id, value);
                 if (created) {
-                    return res.status(200).json({ message: "success" });
+                    return res.status(200).json({ message: "updated product successfully" });
                 }
             }
             catch (err) {
@@ -121,17 +117,16 @@ class Handler {
             const { id } = req.params;
             const deleted = yield use_case.deleteProduct(id);
             if (deleted)
-                return res.status(200).json({ message: "success" });
+                return res.status(200).json({ message: "deleted product successfully" });
             return res.status(400).json({ message: "bad request" });
         });
     }
     routes() {
-        this.router.get("/all/", this.getProducts);
-        this.router.get("/view/:id", this.getProduct);
-        this.router.post("/create/", this.createProduct);
-        this.router.delete("/delete/:id", this.deleteProduct);
-        this.router.put("/update/:id", this.updateProduct);
-        this.router.get("/search/", this.searchProduct);
+        this.router.get("/", this.getProducts);
+        this.router.get("/:id", this.getProduct);
+        this.router.post("/", this.createProduct);
+        this.router.delete("/:id", this.deleteProduct);
+        this.router.put("/:id", this.updateProduct);
     }
 }
 const handler = new Handler();
