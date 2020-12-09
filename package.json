@@ -13,7 +13,7 @@
     "dev": "nodemon ./build/index.js",
     "start": "node ./build/index.js",
     "postinstall": "tsc",
-    "test": "jest --detectOpenHandles && exit 1",
+    "test": "jest --detectOpenHandles --watchAll=false",
     "coverage": "jest --coverage --silent"
   },
   "keywords": [],
