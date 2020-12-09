@@ -2,12 +2,14 @@ import { Request, Response, Router } from "express";
 import Repository from "../../repository/repository";
 import Usecases from "../../usecases/usecases";
 import { schema } from "../../schema/ProductSchema";
+import { RESPONSES } from "../../constants/handler_responses";
 import {
   isPalindrome,
   isIdSize,
   applyDiscount,
   invalidCharacterSize,
 } from "../../utils/utils.functions";
+import Product from "../../entity/Product";
 
 class Handler {
   router: Router;
@@ -17,105 +19,116 @@ class Handler {
     this.routes();
   }
 
-  async getProducts(req: Request, res: Response) {
-
+  getProducts(req: Request, res: Response) {
     const query: any = req.query.query;
-    if(query){
+    if (query) {
       let productDiscount: number = 0;
 
-      if(isPalindrome(query)) {
-        productDiscount = 20
+      if (isPalindrome(query)) {
+        productDiscount = 20;
       }
-  
+
       const repository = new Repository();
       const use_case = new Usecases(repository);
-  
+
       // Check if string isnt empty
       // emptySearch(res, query);
       invalidCharacterSize(res, query);
-  
+
       if (isIdSize(query)) {
         // Search by Id if it matches ID Size
-        const response = await use_case.getProduct(query);
+        const response = use_case.getProduct(query);
         if (Object.keys(response).length === 0)
-          return res.status(404).json({ message: "not found", products: [] });
+          return res.status(404).json({ message: RESPONSES.NOT_FOUND, products: [] });
         return res.status(200).json({ products: [response] });
       } else {
         // Search query on all products columns
-        const products = await use_case.searchProducts(query);
-        if (products.length === 0) return res.status(404).json({ message: 'obtained product search successfully', products: [] });
-        return res
-          .status(200)
-          .json({ products: applyDiscount(productDiscount, products), message: "results" });
+        const products = use_case.searchProducts(query);
+        if (products.length === 0)
+          return res.status(404).json({
+            message: RESPONSES.SEARCH_SUCCESS,
+            products: [],
+          });
+        return res.status(200).json({
+          products: applyDiscount(productDiscount, products),
+          message: RESPONSES.RESULTS,
+        });
       }
     }
 
     const repository = new Repository();
     const use_case = new Usecases(repository);
-    const products = await use_case.getProducts();
+    const products = use_case.getProducts();
     return res.send(products);
   }
 
-  async getProduct(req: Request, res: Response) {
+  getProduct(req: Request, res: Response) {
     const repository = new Repository();
     const use_case = new Usecases(repository);
     const { id } = req.params;
 
-    const product = await use_case.getProduct(id);
+    const product = use_case.getProduct(id);
     if (Object.keys(product).length > 0)
-      return res.status(200).json({ message: "obtainer product successfully", product });
-    return res.status(400).json({ message: "bad request" });
+      return res.status(200).json({ message: RESPONSES.SEARCH_SUCCESS, product });
+    return res.status(400).json({ message: RESPONSES.BAD_REQUEST });
   }
 
-  async createProduct(req: Request, res: Response) {
+  createProduct(req: Request, res: Response) {
     try {
       const repository = new Repository();
       const use_case = new Usecases(repository);
 
-      const value = await schema.validateAsync(req.body);
-      if (!value)
-        return res.status(400).json({ message: "invalid json schema" });
-
-      const created = use_case.createProduct(value);
-      if (created) return res.status(200).json({ message: "created product successfully" });
-      return res.status(400).json({ message: "bad request" });
+      const isValid = schema.validate(req.body);
+      if (!isValid)
+        return res.status(400).json({ message: RESPONSES.INVALID_JSON_SCHEMA });
+      const product = new Product(isValid.value);
+      const created = use_case.createProduct(product);
+      if (created)
+        return res
+          .status(200)
+          .json({ message: RESPONSES.CREATED_PRODUCT_SUCCESS });
+      return res.status(400).json({ message: RESPONSES.BAD_REQUEST });
     } catch (err) {
       return res
         .status(400)
-        .json({ message: "bad request", error: err.message });
+        .json({ message: RESPONSES.BAD_REQUEST, error: err.message });
     }
   }
 
-  async updateProduct(req: Request, res: Response) {
+  updateProduct(req: Request, res: Response) {
     try {
       const repository = new Repository();
       const use_case = new Usecases(repository);
       const { id } = req.params;
 
-      const value = await schema.validateAsync(req.body);
-      if (!value)
-        return res.status(400).json({ message: "invalid json schema" });
-      const created = use_case.updateProduct(id, value);
+      const isValid = schema.validate(req.body);
+      if (!isValid)
+        return res.status(400).json({ message: RESPONSES.INVALID_JSON_SCHEMA });
+      const product = new Product(isValid.value);
+      const created = use_case.updateProduct(id, product);
 
       if (created) {
-        return res.status(200).json({ message: "updated product successfully" });
+        return res
+          .status(200)
+          .json({ message: RESPONSES.UPDATED_PRODUCT_SUCCESS });
       }
     } catch (err) {
       return res
         .status(400)
-        .json({ message: "bad request", error: err.message });
+        .json({ message: RESPONSES.BAD_REQUEST, error: err.message });
     }
   }
 
-  async deleteProduct(req: Request, res: Response) {
+  deleteProduct(req: Request, res: Response) {
     const repository = new Repository();
     const use_case = new Usecases(repository);
     const { id } = req.params;
 
-    const deleted = await use_case.deleteProduct(id);
+    const deleted = use_case.deleteProduct(id);
 
-    if (deleted) return res.status(200).json({ message: "deleted product successfully" });
-    return res.status(400).json({ message: "bad request" });
+    if (deleted)
+      return res.status(200).json({ message: RESPONSES.DELETED_PRODUCT_SUCCESS });
+    return res.status(400).json({ message: RESPONSES.BAD_REQUEST });
   }
 
   routes() {

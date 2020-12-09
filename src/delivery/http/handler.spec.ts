@@ -13,11 +13,11 @@ test("GET /api/product", (done) => {
 });
 
 
-test("GET /api/product/01", (done) => {
+test("GET /api/product/5fcc273a4565220017811b5f", (done) => {
   request(ctx)
-    .get("/api/product/01")
+    .get("/api/product/5fcc273a4565220017811b5f")
     .set("Content-Type", "application/json")
-    .expect(400)
+    .expect(200)
     .end(() => {
       done();
     });
