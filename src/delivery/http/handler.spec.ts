@@ -1,7 +1,7 @@
 const request = require("supertest");
 const ctx = require("../../app");
 
-test("GET /api/product", async (done) => {
+test("GET /api/product", (done) => {
   request(ctx)
     .get("/api/product")
     .set("Content-Type", "application/json")
@@ -11,7 +11,7 @@ test("GET /api/product", async (done) => {
     });
 });
 
-test("GET /api/product/5fcc273a4565220017811b5f", async (done) => {
+test("GET /api/product/5fcc273a4565220017811b5f", (done) => {
   request(ctx)
     .get("/api/product/5fcc273a4565220017811b5f")
     .set("Content-Type", "application/json")
@@ -21,7 +21,7 @@ test("GET /api/product/5fcc273a4565220017811b5f", async (done) => {
     });
 });
 
-test("POST /api/product/", async (done) => {
+test("POST /api/product/", (done) => {
   request(ctx)
     .post("/api/product/")
     .set("Content-Type", "application/json")
@@ -38,7 +38,7 @@ test("POST /api/product/", async (done) => {
     });
 });
 
-test("DELETE /api/product/01", async (done) => {
+test("DELETE /api/product/01", (done) => {
   request(ctx)
     .del("/api/product/01")
     .set("Content-Type", "application/json")
