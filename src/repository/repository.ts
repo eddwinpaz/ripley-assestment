@@ -1,4 +1,4 @@
-import monk from "monk";
+import monk, { IMonkManager } from "monk";
 import Product from "../entity/Product";
 import { RepositoryInterface } from "./repository_interface";
 
@@ -9,16 +9,18 @@ const mongoUri = process.env.MONGO_URI || "db/store";
 
 class Repository implements RepositoryInterface {
   collection: any;
+  db: IMonkManager;
 
   constructor() {
-    const db = monk(mongoUri);
-    this.collection = db.get("products");
+    this.db = monk(mongoUri);
+    this.collection = this.db.get("products");
     console.log(`connected to mongo: ${mongoUri}`);
   }
 
   async createProduct(product: Product): Promise<boolean> {
     try {
       await this.collection.insert(product);
+      await this.db.close();
       return true;
     } catch (err) {
       return false;
@@ -28,6 +30,7 @@ class Repository implements RepositoryInterface {
   async getProducts(): Promise<Product[]> {
     try {
       const response = await this.collection.find({});
+      await this.db.close();
       const products: Array<Product> = [];
 
       if (response !== {}) {
@@ -56,6 +59,8 @@ class Repository implements RepositoryInterface {
   async getProduct(id: string): Promise<Product> {
     try {
       const resp = await this.collection.findOne({ _id: id });
+      await this.db.close();
+
       return new Product(
         resp.id,
         resp.marca,
@@ -75,6 +80,7 @@ class Repository implements RepositoryInterface {
       const resp = await this.collection.findOne({ _id: id });
       if (!resp) return false;
       await this.collection.update({ _id: id }, product);
+      await this.db.close();
       return true;
     } catch (err) {
       return false;
@@ -84,6 +90,7 @@ class Repository implements RepositoryInterface {
   async deleteProduct(id: string): Promise<boolean> {
     try {
       await this.collection.remove({ _id: id });
+      await this.db.close();
       return true;
     } catch (err) {
       return false;
@@ -95,6 +102,7 @@ class Repository implements RepositoryInterface {
       const response = await this.collection.find({
         $text: { $search: query },
       });
+      await this.db.close();
 
       const products: Array<Product> = [];
 
