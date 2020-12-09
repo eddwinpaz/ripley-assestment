@@ -22,7 +22,7 @@ jobs:
       - name: "Start MongoDB For Testing"
         uses: supercharge/mongodb-github-action@1.3.0
         with:
-          mongodb-version: ${{ matrix.mongodb-version }}
+          mongodb-version: 4
 
       - run: npm install --global typescript
       - run: npm install
